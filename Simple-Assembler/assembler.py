@@ -55,6 +55,19 @@ for lineNumber in range(len(assemblyCode)):
 
 
         # -------------------------------------------------------------------------------------------------------
+        if(currentLine[0]=="mov" and len(currentLine)==3):
+            if(currentLine[2][1::].isdecimal()):
+                # mov reg1 $Imm
+                pass
+            elif(registerAddress(currentLine[2])!=-1):
+                # mov reg1 reg2
+                pass
+        else:
+            encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+        # _______________________________________________________________________________________________________
+
+
+        # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='a' and len(currentLine)==4):
             pass
         else:
