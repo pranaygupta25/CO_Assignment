@@ -17,22 +17,27 @@ haltEncountered = False
 labels = dict()
 variables = dict()
 nextVariableLocation = len(assemblyCode)-emptyLines
+variableDeclarationsNow = True
 
 for lineNumber in range(len(assemblyCode)):
     if(not assemblyCode[lineNumber]):
         continue
     else:
         currentLine = assemblyCode[lineNumber].split()
-        if(currentLine[0][-1]==":"):
-            labels[currentLine[0][:len(currentLine[0]):]] = binary8bit(lineNumber)
-            currentLine.pop(0)
-        elif(currentLine[0]=="var"):
+        if(currentLine[0]=="var" and variableDeclarationsNow):
             currentLine.pop(0)
             if(len(currentLine)==1):
                 variables[currentLine[0]] = binary8bit(nextVariableLocation)
                 nextVariableLocation += 1
             else:
                 encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Improper variable declaration")
+        elif(currentLine[0]!="var"):
+            variableDeclarationsNow = False
+        elif(not variableDeclarationsNow and currentLine[0]=="var"):
+                encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Variable not declared at beginning")
+        elif(currentLine[0][-1]==":"):
+            labels[currentLine[0][:len(currentLine[0]):]] = binary8bit(lineNumber)
+            currentLine.pop(0)
 
 
         # -------------------------------------------------------------------------------------------------------
