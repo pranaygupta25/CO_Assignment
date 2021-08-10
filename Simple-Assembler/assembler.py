@@ -96,10 +96,8 @@ for lineNumber in range(len(assemblyCode)):
         # -------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
+if(not haltEncountered):
+    encounteredErrors.append("ERROR: No halt(hlt) instruction found")
 
 
 if(len(encounteredErrors)):
