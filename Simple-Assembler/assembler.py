@@ -88,7 +88,14 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='e' and len(currentLine)==2):
-            pass
+            ins = currentLine.pop(0)
+            if(currentLine[0] not in labels.keys()):
+                if(currentLine[0] in variables.keys()):
+                    encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Misuse of variable as label")
+                else:
+                    encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+":  Use of undefined labels")
+            else:
+                convertedBinary.append(opcode(ins)+'0'*3+labels[currentLine[0]])
         else:
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
         # _______________________________________________________________________________________________________
