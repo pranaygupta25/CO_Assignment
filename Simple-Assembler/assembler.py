@@ -31,10 +31,12 @@ for lineNumber in range(len(assemblyCode)):
                 nextVariableLocation += 1
             else:
                 encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Improper variable declaration")
+                continue
+        elif(currentLine[0]=="var" and not variableDeclarationsNow):
+                encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Variable not declared at beginning")
+                continue
         elif(currentLine[0]!="var"):
             variableDeclarationsNow = False
-        elif(not variableDeclarationsNow and currentLine[0]=="var"):
-                encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Variable not declared at beginning")
         elif(currentLine[0][-1]==":"):
             labels[currentLine[0][:len(currentLine[0]):]] = binary8bit(lineNumber)
             currentLine.pop(0)
