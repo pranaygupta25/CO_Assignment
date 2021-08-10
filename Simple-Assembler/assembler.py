@@ -83,9 +83,7 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='a' and len(currentLine)==4):
-            temp = opcode(currentLine[0])+'00'+registerAddress(currentLine[1])+registerAddress(currentLine[2])+registerAddress(currentLine[3])
-            convertedBinary.append(temp)
-            # pass
+            pass
         elif(typeOfInstruction(currentLine[0])=='a'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
             continue
