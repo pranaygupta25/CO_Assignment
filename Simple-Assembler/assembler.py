@@ -67,13 +67,17 @@ for lineNumber in range(len(assemblyCode)):
         if(currentLine[0]=="mov" and len(currentLine)==3):
             if(registerAddress(currentLine[2])!=-1):
                 # mov reg1 reg2
-                temp = opcode(currentLine[0], 1)+"00000"+registerAddress(currentLine[1])+registerAddress(currentLine[2])
-                convertedBinary.append(temp)
+                if(registerAddress(currentLine[1])==-1 or registerAddress(currentLine[2])==-1):
+                    encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Invalid Register")
+                convertedBinary.append(opcode(currentLine[0], 1)+"00000"+registerAddress(currentLine[1])+registerAddress(currentLine[2]))
                 continue
             elif(currentLine[2][1::].isdecimal()):
                 # mov reg1 $Imm
-                temp = opcode(currentLine[0], 0)+registerAddress(currentLine[1])+binary8bit(int(currentLine[2][1::]))
-                convertedBinary.append(temp)
+                if(registerAddress(currentLine[1])==-1):
+                    encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Invalid Register")
+                if(int(currentLine[2][1::])<0 or int(currentLine[2][1::]>255)):
+                    encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Illegal Immediate Value")
+                convertedBinary.append(opcode(currentLine[0], 0)+registerAddress(currentLine[1])+binary8bit(int(currentLine[2][1::])))
                 continue
         elif(currentLine[0]=="mov"):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
