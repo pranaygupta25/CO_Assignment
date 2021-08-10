@@ -20,6 +20,12 @@ nextVariableLocation = len(assemblyCode)-emptyLines
 variableDeclarationsNow = True
 
 for lineNumber in range(len(assemblyCode)):
+    currentLine = assemblyCode[lineNumber].split()
+    if(currentLine[0][-1]==":"):
+            labels[(currentLine[0][:len(currentLine[0])-1:])] = binary8bit(lineNumber)
+
+
+for lineNumber in range(len(assemblyCode)):
     if(not assemblyCode[lineNumber]):
         continue
     else:
@@ -37,9 +43,10 @@ for lineNumber in range(len(assemblyCode)):
                 continue
         elif(currentLine[0]!="var"):
             variableDeclarationsNow = False
-        elif(currentLine[0][-1]==":"):
-            labels[currentLine[0][:len(currentLine[0]):]] = binary8bit(lineNumber)
+        
+        if(currentLine[0][-1]==":"):
             currentLine.pop(0)
+        
 
 
         # -------------------------------------------------------------------------------------------------------
@@ -58,11 +65,11 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if(currentLine[0]=="mov" and len(currentLine)==3):
-            if(currentLine[2][1::].isdecimal()):
-                # mov reg1 $Imm
-                pass
-            elif(registerAddress(currentLine[2])!=-1):
+            if(registerAddress(currentLine[2])!=-1):
                 # mov reg1 reg2
+                pass
+            elif(currentLine[2][1::].isdecimal()):
+                # mov reg1 $Imm
                 pass
         elif(currentLine[0]=="mov"):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
@@ -72,7 +79,9 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='a' and len(currentLine)==4):
-            pass
+            temp = opcode(currentLine[0])+'00'+registerAddress(currentLine[1])+registerAddress(currentLine[2])+registerAddress(currentLine[3])
+            convertedBinary.append(temp)
+            # pass
         elif(typeOfInstruction(currentLine[0])=='a'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
             continue
