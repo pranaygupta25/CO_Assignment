@@ -62,40 +62,45 @@ for lineNumber in range(len(assemblyCode)):
             elif(registerAddress(currentLine[2])!=-1):
                 # mov reg1 reg2
                 pass
-        else:
+        elif(currentLine[0]=="mov"):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
 
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='a' and len(currentLine)==4):
             pass
-        else:
+        elif(typeOfInstruction(currentLine[0])=='a'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
         
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='b' and len(currentLine)==3):
             pass
-        else:
+        elif(typeOfInstruction(currentLine[0])=='b'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
         
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='c' and len(currentLine)==3):
             pass
-        else:
+        elif(typeOfInstruction(currentLine[0])=='c'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
         
 
         # -------------------------------------------------------------------------------------------------------
         if(typeOfInstruction(currentLine[0])=='d' and len(currentLine)==3):
             pass
-        else:
+        elif(typeOfInstruction(currentLine[0])=='d'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
         
 
@@ -109,8 +114,9 @@ for lineNumber in range(len(assemblyCode)):
                     encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+":  Use of undefined labels")
             else:
                 convertedBinary.append(opcode(ins)+'0'*3+labels[currentLine[0]])
-        else:
+        elif(typeOfInstruction(currentLine[0])=='e'):
             encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
         
 
@@ -118,6 +124,9 @@ for lineNumber in range(len(assemblyCode)):
         if(typeOfInstruction(currentLine[0])=='f' and len(currentLine)==1):
             convertedBinary.append(opcode(currentLine[0])+'0'*11)
             haltEncountered = True
+        elif(typeOfInstruction(currentLine[0])=='f'):
+            encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Wrong Syntax used for instruction")
+            continue
         # _______________________________________________________________________________________________________
 
 
