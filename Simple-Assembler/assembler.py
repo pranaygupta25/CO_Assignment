@@ -77,7 +77,7 @@ for lineNumber in range(len(assemblyCode)):
                 if(registerAddress(currentLine[1])==-1):
                     encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Invalid Register")
                     continue
-                if(int(currentLine[2][1::])<0 or int(currentLine[2][1::]>255)):
+                if(int(currentLine[2][1::])<0 or int(currentLine[2][1::])>255):
                     encounteredErrors.append("ERROR at Line "+str(lineNumber+1)+": Illegal Immediate Value")
                     continue
                 convertedBinary.append(opcode(currentLine[0], 0)+registerAddress(currentLine[1])+binary8bit(int(currentLine[2][1::])))
