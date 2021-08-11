@@ -50,7 +50,7 @@ def opcode(ins, isRegister= -1):
 
 def typeOfInstruction(ins, isRegister= -1):
     '''
-    Returns a string from {'a', 'b', 'c', 'd', 'e', 'f'} depending on the type of the instrcution passed as a parameter\n
+    Returns a string from {'a', 'b', 'c', 'd', 'e', 'f'} depending on the type of the instruction passed as a parameter\n
     If the instruction is not part of the ISA, the function returns -1
     ins: The syntactical instruction. For example, mul for multiply instruction
     In case of MOV instruction, isRegister= 0 for immediate and isRegister= 1 for register\n
