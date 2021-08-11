@@ -165,10 +165,15 @@ for lineNumber in range(len(assemblyCode)):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
                 continue
         if (currentLine[2] not in variables.keys()):
-            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Use of undefined variable")
+            if(currentLine[2] in labels.keys()):
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Misuse of label as variable")
+                continue
+            else:
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Use of undefined variable")
+                continue
+        else:
+            convertedBinary.append(opcode(currentLine[0]) + registerAddress(currentLine[1]) + variables[currentLine[2]])
             continue
-        convertedBinary.append(opcode(currentLine[0]) + registerAddress(currentLine[1]) + variables[currentLine[2]])
-        continue
     elif (typeOfInstruction(currentLine[0]) == 'd'):
         encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
         continue
@@ -180,10 +185,13 @@ for lineNumber in range(len(assemblyCode)):
         if (currentLine[0] not in labels.keys()):
             if (currentLine[0] in variables.keys()):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Misuse of variable as label")
+                continue
             else:
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ":  Use of undefined labels")
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Use of undefined labels")
+                continue
         else:
             convertedBinary.append(opcode(ins) + '0' * 3 + labels[currentLine[0]])
+            continue
     elif (typeOfInstruction(currentLine[0]) == 'e'):
         encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
         continue
@@ -193,6 +201,7 @@ for lineNumber in range(len(assemblyCode)):
     if (typeOfInstruction(currentLine[0]) == 'f' and len(currentLine) == 1):
         convertedBinary.append(opcode(currentLine[0]) + '0' * 11)
         haltEncountered = True
+        continue
     elif (typeOfInstruction(currentLine[0]) == 'f'):
         encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
         continue
