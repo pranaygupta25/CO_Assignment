@@ -26,11 +26,15 @@ nextVariableLocation = len(assemblyCode) - varLines
 while(varLines):
     line = assemblyCode[0].split()
     if(line[0] == "var" and len(line) == 2):
-        variables[line[1]] = binary8bit(nextVariableLocation)
-        nextVariableLocation += 1
-        varLines -= 1
-        assemblyCode.pop(0)
-        continue
+        if(line[1] not in variables.keys()):
+            variables[line[1]] = binary8bit(nextVariableLocation)
+            nextVariableLocation += 1
+            varLines -= 1
+            assemblyCode.pop(0)
+            continue
+        else:
+            encounteredErrors.append("ERROR: Multiple declarations for the same variable found")
+            continue
     elif(line[0] == "var"):
         encounteredErrors.append("ERROR: Improper variable declaration")
         varLines -= 1
@@ -46,11 +50,15 @@ variableDeclarationsNow = False
 for lineNumber in range(len(assemblyCode)):
     currentLine = assemblyCode[lineNumber].split()
     if (assemblyCode[lineNumber].split()[0][-1] == ":"):
-        labels[(assemblyCode[lineNumber].split()[0][:len(assemblyCode[lineNumber].split()[0]) - 1:])] = binary8bit(lineNumber)
-        temp = ""
-        for i in range(1,len(assemblyCode[lineNumber].split())):
-            temp += assemblyCode[lineNumber].split()[i] + " "
-        assemblyCode[lineNumber] = temp
+        if((assemblyCode[lineNumber].split()[0][:len(assemblyCode[lineNumber].split()[0]) - 1:]) not in labels.keys()):
+            labels[(assemblyCode[lineNumber].split()[0][:len(assemblyCode[lineNumber].split()[0]) - 1:])] = binary8bit(lineNumber)
+            temp = ""
+            for i in range(1,len(assemblyCode[lineNumber].split())):
+                temp += assemblyCode[lineNumber].split()[i] + " "
+            assemblyCode[lineNumber] = temp
+        else:
+            encounteredErrors.append("ERROR: Multiple declarations for the same label found")
+            continue
 
 for lineNumber in range(len(assemblyCode)):
 
@@ -92,6 +100,9 @@ for lineNumber in range(len(assemblyCode)):
             continue
         elif (currentLine[2][1::].isdecimal()):
             # mov reg1 $Imm
+            if (currentLine[2][0] != "$"):
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Syntax Error")
+                continue
             if (registerAddress(currentLine[1]) == -1):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
                 continue
@@ -111,11 +122,11 @@ for lineNumber in range(len(assemblyCode)):
     # -------------------------------------------------------------------------------------------------------
     if (typeOfInstruction(currentLine[0]) == 'a' and len(currentLine) == 4):
         if (registerAddress(currentLine[1]) == -1 or registerAddress(currentLine[2]) == -1 or registerAddress(currentLine[3]) == -1):
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
-                continue
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
+            continue
         if (registerAddress(currentLine[1]) == "111" or registerAddress(currentLine[2]) == "111" or registerAddress(currentLine[3]) == "111"):
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
-                continue
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+            continue
         convertedBinary.append(opcode(currentLine[0]) + "00" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]) + registerAddress(currentLine[3]))
         continue
     elif (typeOfInstruction(currentLine[0]) == 'a'):
@@ -125,6 +136,9 @@ for lineNumber in range(len(assemblyCode)):
 
     # -------------------------------------------------------------------------------------------------------
     if (typeOfInstruction(currentLine[0]) == 'b' and len(currentLine) == 3):
+        if (currentLine[2][0] != "$"):
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Syntax Error")
+            continue
         if(int(currentLine[2][1::]) not in range(0,256)):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal Immediate Value")
             continue
@@ -132,8 +146,8 @@ for lineNumber in range(len(assemblyCode)):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
             continue
         if(registerAddress(currentLine[1]) == "111"):
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
-                continue
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+            continue
         convertedBinary.append((opcode(currentLine[0]) + registerAddress(currentLine[1]) + binary8bit(int(currentLine[2][1::]))))
         continue
     elif(typeOfInstruction(currentLine[0]) == 'b'):
@@ -147,8 +161,8 @@ for lineNumber in range(len(assemblyCode)):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
             continue
         if(registerAddress(currentLine[1]) == "111" or registerAddress(currentLine[2]) == "111"):
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
-                continue
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+            continue
         convertedBinary.append(opcode(currentLine[0]) + "00000" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]))
         continue
     elif (typeOfInstruction(currentLine[0]) == 'c'):
@@ -162,8 +176,8 @@ for lineNumber in range(len(assemblyCode)):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
             continue
         if(registerAddress(currentLine[1]) == "111"):
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
-                continue
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+            continue
         if (currentLine[2] not in variables.keys()):
             if(currentLine[2] in labels.keys()):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Misuse of label as variable")
