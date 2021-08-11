@@ -11,7 +11,7 @@ encounteredErrors = []  # append any encountered errors to this list
 # counting the number of empty lines
 emptyLines = 0
 for line in assemblyCode:
-    if not line:
+    if (not line):
         emptyLines += 1
 
 haltEncountered = False
@@ -66,12 +66,18 @@ for lineNumber in range(len(assemblyCode)):
                 if (registerAddress(currentLine[1]) == -1 or registerAddress(currentLine[2]) == -1):
                     encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
                     continue
+                if(registerAddress(currentLine[1]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+                    continue
                 convertedBinary.append(opcode(currentLine[0], 1) + "00000" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]))
                 continue
             elif (currentLine[2][1::].isdecimal()):
                 # mov reg1 $Imm
                 if (registerAddress(currentLine[1]) == -1):
                     encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
+                    continue
+                if(registerAddress(currentLine[1]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
                     continue
                 if (int(currentLine[2][1::]) < 0 or int(currentLine[2][1::]) > 255):
                     encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal Immediate Value")
@@ -85,10 +91,14 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if (typeOfInstruction(currentLine[0]) == 'a' and len(currentLine) == 4):
-            #pass
-            convertedBinary.append(opcode(currentLine[0]) + "00" + registerAddress("R1") + registerAddress("R2") + registerAddress("R3"))
+            if (registerAddress(currentLine[1]) == -1 or registerAddress(currentLine[2]) == -1 or registerAddress(currentLine[3]) == -1):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
+                    continue
+            if (registerAddress(currentLine[1]) == "111" or registerAddress(currentLine[2]) == "111" or registerAddress(currentLine[3]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+                    continue
+            convertedBinary.append(opcode(currentLine[0]) + "00" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]) + registerAddress(currentLine[3]))
             continue
-
         elif (typeOfInstruction(currentLine[0]) == 'a'):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
             continue
@@ -96,29 +106,32 @@ for lineNumber in range(len(assemblyCode)):
 
         # -------------------------------------------------------------------------------------------------------
         if (typeOfInstruction(currentLine[0]) == 'b' and len(currentLine) == 3):
-            #pass
-            if (int(currentLine[2][1::]) in range(0, 256)):
-                convertedBinary.append((opcode(currentLine[0]) + registerAddress("R1") + binary8bit(int(currentLine[2][1::]))))
+            if(int(currentLine[2][1::]) not in range(0,256)):
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal Immediate Value")
                 continue
-            else:
-                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
+            if(registerAddress(currentLine[1])==-1):
+                encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
                 continue
-        elif (typeOfInstruction(currentLine[0]) == 'b'):
-            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal Immediate Value")
+            if(registerAddress(currentLine[1]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+                    continue
+            convertedBinary.append((opcode(currentLine[0]) + registerAddress(currentLine[1]) + binary8bit(int(currentLine[2][1::]))))
+            continue
+        elif(typeOfInstruction(currentLine[0]) == 'b'):
+            encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
             continue
         # _______________________________________________________________________________________________________
 
         # -------------------------------------------------------------------------------------------------------
         if (typeOfInstruction(currentLine[0]) == 'c' and len(currentLine) == 3):
-            # pass
             if (registerAddress(currentLine[1]) == -1 or registerAddress(currentLine[2]) == -1):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
                 continue
-            else:
-                convertedBinary.append(opcode(currentLine[0]) + "00000" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]))
-                continue
-
-
+            if(registerAddress(currentLine[1]) == "111" or registerAddress(currentLine[2]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+                    continue
+            convertedBinary.append(opcode(currentLine[0]) + "00000" + registerAddress(currentLine[1]) + registerAddress(currentLine[2]))
+            continue
         elif (typeOfInstruction(currentLine[0]) == 'c'):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
             continue
@@ -129,14 +142,14 @@ for lineNumber in range(len(assemblyCode)):
             if (registerAddress(currentLine[1]) == -1):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid Register")
                 continue
-
+            if(registerAddress(currentLine[1]) == "111"):
+                    encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Illegal use of FLAGS")
+                    continue
             if (currentLine[2] not in variables.keys()):
                 encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Use of undefined variable")
                 continue
-
             convertedBinary.append(opcode(currentLine[0]) + registerAddress(currentLine[1]) + variables[currentLine[2]])
             continue
-
         elif (typeOfInstruction(currentLine[0]) == 'd'):
             encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Wrong Syntax used for instruction")
             continue
