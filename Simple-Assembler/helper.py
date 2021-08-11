@@ -60,7 +60,7 @@ def typeOfInstruction(ins, isRegister= -1):
                 'a': ["add", "sub", "mul", "xor", "or", "and"],
                 'b': ["mov", "rs", "ls"],
                 'c': ["mov", "div", "not", "cmp"],
-                'd': ["ld", "sr"],
+                'd': ["ld", "st"],
                 'e': ["jmp", "jlt", "jgt", "je"],
                 'f': ["hlt"]
             } 
@@ -70,7 +70,7 @@ def typeOfInstruction(ins, isRegister= -1):
         return 'c'
     for i in type.keys():
         if ins in type[i]:
-            return str(i)
+            return i
     return -1
 
 

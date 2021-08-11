@@ -31,7 +31,6 @@ while(varLines):
         varLines -= 1
         assemblyCode.pop(0)
         continue
-        # pass
     elif(line[0] == "var"):
         encounteredErrors.append("ERROR: Improper variable declaration")
         varLines -= 1
@@ -48,7 +47,10 @@ for lineNumber in range(len(assemblyCode)):
     currentLine = assemblyCode[lineNumber].split()
     if (assemblyCode[lineNumber].split()[0][-1] == ":"):
         labels[(assemblyCode[lineNumber].split()[0][:len(assemblyCode[lineNumber].split()[0]) - 1:])] = binary8bit(lineNumber)
-        assemblyCode[lineNumber].split().pop(0)
+        temp = ""
+        for i in range(1,len(assemblyCode[lineNumber].split())):
+            temp += assemblyCode[lineNumber].split()[i] + " "
+        assemblyCode[lineNumber] = temp
 
 for lineNumber in range(len(assemblyCode)):
 
@@ -66,7 +68,7 @@ for lineNumber in range(len(assemblyCode)):
     # _______________________________________________________________________________________________________
 
     # -------------------------------------------------------------------------------------------------------
-    if (typeOfInstruction(currentLine[0]) == -1):
+    if (typeOfInstruction(currentLine[0]) == -1 and currentLine[0] != "mov"):
         encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Invalid instruction")
         continue
     # _______________________________________________________________________________________________________
