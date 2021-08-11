@@ -56,8 +56,13 @@ for lineNumber in range(len(assemblyCode)):
 
 
     currentLine = assemblyCode[lineNumber].split()
+    if (not currentLine):
+        continue
     if (currentLine[0] == "var" and not variableDeclarationsNow):
         encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Variable not declared at beginning")
+        continue
+    if (currentLine[0][-1] == ":"):
+        encounteredErrors.append("ERROR at Line " + str(lineNumber + 1) + ": Use of multiple labels is not supported")
         continue
 
 
