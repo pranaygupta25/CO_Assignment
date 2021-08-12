@@ -17,7 +17,9 @@ variableDeclarationsNow = True
 
 varLines = 0
 for line in assemblyCode:
-    if(line.split()[0] == "var"):
+    if (not line):
+        continue
+    elif(line.split()[0] == "var"):
         varLines += 1
     else:
         break
