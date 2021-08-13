@@ -243,7 +243,9 @@ for lineNumber in range(len(assemblyCode)):
 if (not haltEncountered):
     encounteredErrors.append("ERROR: No halt(hlt) instruction found")
 
-if (len(encounteredErrors)):
+if(len(convertedBinary)>256):
+    print("ERROR: The code length exceeds the maximum capacity (256 lines)")
+elif (len(encounteredErrors)):
     for error in encounteredErrors:
         print(error)
 else:
