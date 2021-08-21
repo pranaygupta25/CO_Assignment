@@ -57,7 +57,9 @@ class ExecutionEngine:
         elif(opcode == "00011"):
             # mov unused reg1 reg2
             # 5   5      3    3
-            pass
+            reg1 = instruction[10:13:]      # reading the address of reg1
+            reg2 = instruction[13::]        # reading the address of reg2
+            RF.setRegister(reg1, RF.getRegister(reg2, False))
             RF.resetFlagRegister()
             return (False, PC.getValue() + 1)
         # ........................................................................................................................
