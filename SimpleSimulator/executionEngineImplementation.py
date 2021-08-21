@@ -8,9 +8,8 @@ class ExecutionEngine:
     def execute(self, instruction):
         '''
         This function takes a 16bit binary string of assembly instructions and returns
-        \n\tThe updated state of the halted instruction
-        \n\tand
-        \n\tThe updated value of the program counter
+        \t(The updated state of the halted instruction, 
+        \tThe updated value of the program counter)
         '''
         opcode = instruction[:5:]
 
