@@ -67,9 +67,12 @@ class ExecutionEngine:
         elif(opcode == "00100"):
             # ld reg1 mem_addr
             # 5  3    8
+            reg1 = instruction[5:8:]
+            memoryAddress = instruction[8::]
             MEM.xCoordinates.append(MEM.cycle)                          # Appending the point
-            MEM.yCoordinates.append(int(instruction[8::], 2))           # of Memory Access
-            pass
+            MEM.yCoordinates.append(binary8bitToInt(memoryAddress))     # of Memory Access
+            valueAtMemory = MEM.getValueFromAddress(memoryAddress)
+            RF.setRegister(reg1, valueAtMemory)
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
@@ -77,9 +80,11 @@ class ExecutionEngine:
         elif(opcode == "00101"):
             # st reg1 mem_addr
             # 5  3    8
+            reg1 = instruction[5:8:]
+            memoryAddress = instruction[8::]
             MEM.xCoordinates.append(MEM.cycle)                          # Appending the point
-            MEM.yCoordinates.append(int(instruction[8::], 2))           # of Memory Access
-            pass
+            MEM.yCoordinates.append(binary8bitToInt(memoryAddress))     # of Memory Access
+            MEM.setValueOfAddress(memoryAddress, RF.getRegister(reg1, False))
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
