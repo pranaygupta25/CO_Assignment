@@ -1,5 +1,5 @@
 from sys import stdin
-from utilities import intToBinary16bit
+from utilities import intToBinary16bit, binary8bitToInt
 
 
 
@@ -56,7 +56,7 @@ class Memory:
         \tmemoryAddress: 8bit binary string of address of the variable
         \tintValue: Integer value to set the value of the variable 
         '''
-        self.mem[memoryAddress] = intToBinary16bit(intValue)
+        self.mem[binary8bitToInt(memoryAddress)] = intToBinary16bit(intValue)
     # ........................................................................................................................
 
     def plotMemoryAccessTrace(self):
