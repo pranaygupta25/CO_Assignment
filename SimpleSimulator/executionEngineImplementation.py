@@ -46,7 +46,10 @@ class ExecutionEngine:
         elif(opcode == "00010"):
             # mov reg1 $Imm
             # 5   3    8
-            pass
+            reg1 = instruction[5:8:]        # reading address of reg1
+            value = instruction[8::]        # reading the value of $Imm
+            value = binary8bitToInt(value)
+            RF.setRegister(reg1, value)
             RF.resetFlagRegister()
             return (False, PC.getValue() + 1)
         # ........................................................................................................................
