@@ -163,7 +163,15 @@ class ExecutionEngine:
         elif(opcode == "01110"):
             # cmp unused reg1 reg2
             # 5   5      3    3
-            pass
+            reg1 = instruction[10:13:]      # reading address of reg1
+            reg2 = instruction[13::]        # reading address of reg2
+
+            if RF.getRegister(reg1, False) < RF.getRegister(reg2, False):
+                RF.setLessThanFlag()
+            elif RF.getRegister(reg1, False) > RF.getRegister(reg2, False):
+                RF.setGreaterThanFlag()
+            else:
+                RF.setEqualsFlag()
             return (False, PC.getValue() + 1)
         # ........................................................................................................................
 
