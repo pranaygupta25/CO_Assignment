@@ -95,7 +95,11 @@ class ExecutionEngine:
             reg1 = instruction[ 7:10:]      # reading address of reg1
             reg2 = instruction[10:13:]      # reading address of reg2
             reg3 = instruction[13:16:]      # reading address of reg3
-            pass
+            res = RF.getRegister(reg2, False) + RF.getRegister(reg3, False)
+            if(checkOverflow(res)):
+                RF.setOverflowFlag()
+            RF.setRegister(reg1, res)
+
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
