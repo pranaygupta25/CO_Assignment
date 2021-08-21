@@ -186,18 +186,21 @@ class ExecutionEngine:
             # jlt unused mem_addr
             # 5   3      8
             if RF.flagRegister == "0000000000000100":
-                memory = instruction[8::]
-                (halt, newPC) = (False, binary8bitToInt(memory))
+                memoryAddress = instruction[8::]
+                (halt, newPC) = (False, binary8bitToInt(memoryAddress))
+            else:
+                (halt, newPC) = (False, PC.getValue() + 1)
             RF.resetFlagRegister()
-            
         # ........................................................................................................................
 
         elif(opcode == "10001"):
             # jgt unused mem_addr
             # 5   3      8
             if RF.flagRegister == "0000000000000010":
-                memory = instruction[8::]
-                (halt, newPC) = (False, binary8bitToInt(memory))
+                memoryAddress = instruction[8::]
+                (halt, newPC) = (False, binary8bitToInt(memoryAddress))
+            else:
+                (halt, newPC) = (False, PC.getValue() + 1)
             RF.resetFlagRegister()
         # ........................................................................................................................
 
@@ -205,8 +208,10 @@ class ExecutionEngine:
             # je unused mem_addr
             # 5  3      8
             if RF.flagRegister == "0000000000000001":
-                memory = instruction[8::]
-                (halt, newPC) = (False, binary8bitToInt(memory))
+                memoryAddress = instruction[8::]
+                (halt, newPC) = (False, binary8bitToInt(memoryAddress))
+            else:
+                (halt, newPC) = (False, PC.getValue() + 1)
             RF.resetFlagRegister()
         # ........................................................................................................................
 
@@ -218,6 +223,7 @@ class ExecutionEngine:
         # ........................................................................................................................
 
         MEM.cycle += 1
+        return (halt, newPC)
         
 
 EE = ExecutionEngine()
