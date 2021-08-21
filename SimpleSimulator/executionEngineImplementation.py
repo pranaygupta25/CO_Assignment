@@ -122,7 +122,10 @@ class ExecutionEngine:
         elif(opcode == "01001"):
             # ls reg1 $Imm
             # 5  3    8
-            pass
+            reg1 = instruction[5:8:]
+            immediateValue = binary8bitToInt(instruction[8::])
+            shiftedString = RF.getRegister(reg1, True)[immediateValue::] + '0' * immediateValue
+            RF.setRegister(reg1, int(shiftedString, 2))
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
