@@ -195,7 +195,9 @@ class ExecutionEngine:
         elif(opcode == "10001"):
             # jgt unused mem_addr
             # 5   3      8
-            
+            if RF.flagRegister == "0000000000000010":
+                memory = instruction[8::]
+                return (False, binary8bitToInt(memory))
             RF.resetFlagRegister()
         # ........................................................................................................................
 
