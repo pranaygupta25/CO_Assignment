@@ -29,7 +29,7 @@ class ExecutionEngine:
                 RF.setOverflowFlag()
             RF.setRegister(reg1, res)
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00001"):
@@ -40,7 +40,7 @@ class ExecutionEngine:
             reg3 = instruction[13:16:]      # reading address of reg3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00010"):
@@ -51,7 +51,7 @@ class ExecutionEngine:
             value = binary8bitToInt(value)
             RF.setRegister(reg1, value)
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00011"):
@@ -61,7 +61,7 @@ class ExecutionEngine:
             reg2 = instruction[13::]        # reading the address of reg2
             RF.setRegister(reg1, RF.getRegister(reg2, False))
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00100"):
@@ -71,7 +71,7 @@ class ExecutionEngine:
             MEM.yCoordinates.append(int(instruction[8::], 2))           # of Memory Access
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00101"):
@@ -81,7 +81,7 @@ class ExecutionEngine:
             MEM.yCoordinates.append(int(instruction[8::], 2))           # of Memory Access
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00110"):
@@ -92,7 +92,7 @@ class ExecutionEngine:
             reg3 = instruction[13:16:]      # reading address of reg3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "00111"):
@@ -100,7 +100,7 @@ class ExecutionEngine:
             # 5   5      3    3   
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01000"):
@@ -108,7 +108,7 @@ class ExecutionEngine:
             # 5  3    8
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01001"):
@@ -116,7 +116,7 @@ class ExecutionEngine:
             # 5  3    8
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01010"):
@@ -127,7 +127,7 @@ class ExecutionEngine:
             reg3 = instruction[13:16:]      # reading address of reg3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01011"):
@@ -138,7 +138,7 @@ class ExecutionEngine:
             reg3 = instruction[13:16:]      # reading address of reg3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01100"):
@@ -149,7 +149,7 @@ class ExecutionEngine:
             reg3 = instruction[13:16:]      # reading address of reg3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01101"):
@@ -157,7 +157,7 @@ class ExecutionEngine:
             # 5   5      3    3
             pass
             RF.resetFlagRegister()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01110"):
@@ -172,7 +172,7 @@ class ExecutionEngine:
                 RF.setGreaterThanFlag()
             else:
                 RF.setEqualsFlag()
-            return (False, PC.getValue() + 1)
+            (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
         elif(opcode == "01111"):
@@ -187,7 +187,7 @@ class ExecutionEngine:
             # 5   3      8
             if RF.flagRegister == "0000000000000100":
                 memory = instruction[8::]
-                return (False, binary8bitToInt(memory))
+                (halt, newPC) = (False, binary8bitToInt(memory))
             RF.resetFlagRegister()
             
         # ........................................................................................................................
@@ -197,7 +197,7 @@ class ExecutionEngine:
             # 5   3      8
             if RF.flagRegister == "0000000000000010":
                 memory = instruction[8::]
-                return (False, binary8bitToInt(memory))
+                (halt, newPC) = (False, binary8bitToInt(memory))
             RF.resetFlagRegister()
         # ........................................................................................................................
 
@@ -206,7 +206,7 @@ class ExecutionEngine:
             # 5  3      8
             if RF.flagRegister == "0000000000000001":
                 memory = instruction[8::]
-                return (False, binary8bitToInt(memory))
+                (halt, newPC) = (False, binary8bitToInt(memory))
             RF.resetFlagRegister()
         # ........................................................................................................................
 
@@ -214,7 +214,7 @@ class ExecutionEngine:
             # hlt unused
             # 5   11
             RF.resetFlagRegister()
-            return (True, PC.getValue() + 1)
+            (halt, newPC) = (True, PC.getValue() + 1)
         # ........................................................................................................................
 
         MEM.cycle += 1
