@@ -78,7 +78,7 @@ class Registers:
             self.registers[registerAddress] = value
         else:
             rawBinary = bin(value)[2::]
-            self.registers[registerAddress] = rawBinary[len(rawBinary)-16::]
+            self.registers[registerAddress] = int(rawBinary[len(rawBinary)-16::], 2)
     # ........................................................................................................................
     
     def getRegister(self, registerAddress, binaryOrDecimal):
