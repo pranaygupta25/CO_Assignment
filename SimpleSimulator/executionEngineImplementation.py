@@ -188,7 +188,7 @@ class ExecutionEngine:
             if RF.flagRegister == "0000000000000100":
                 memory = instruction[8::]
                 return (False, binary8bitToInt(memory))
-            RF.resetFlagRegister()
+            
             
         # ........................................................................................................................
 
