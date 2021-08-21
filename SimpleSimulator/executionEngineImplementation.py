@@ -27,8 +27,9 @@ class ExecutionEngine:
             res = RF.getRegister(reg2, False) + RF.getRegister(reg3, False)
             if(checkOverflow(res)):
                 RF.setOverflowFlag()
+            else:
+                RF.resetFlagRegister()
             RF.setRegister(reg1, res)
-            RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
@@ -38,14 +39,13 @@ class ExecutionEngine:
             reg1 = instruction[ 7:10:]      # reading address of reg1
             reg2 = instruction[10:13:]      # reading address of reg2
             reg3 = instruction[13:16:]      # reading address of reg3
-            
             res = RF.getRegister(reg2,False) - RF.getRegister(reg3,False)
-            if (res <0):
+            if (res < 0):
                 RF.setOverflowFlag()
                 RF.setRegister(reg1,0)
             else:
                 RF.setRegister(reg1,res)
-            RF.resetFlagRegister()
+                RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
@@ -104,9 +104,9 @@ class ExecutionEngine:
             res = RF.getRegister(reg2, False) * RF.getRegister(reg3, False)
             if(checkOverflow(res)):
                 RF.setOverflowFlag()
+            else:
+                RF.resetFlagRegister()
             RF.setRegister(reg1, res)
-
-            RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
 
@@ -151,7 +151,6 @@ class ExecutionEngine:
             reg1 = instruction[ 7:10:]      # reading address of reg1
             reg2 = instruction[10:13:]      # reading address of reg2
             reg3 = instruction[13:16:]      # reading address of reg3
-
             res = RF.getRegister(reg2,False) ^ RF.getRegister(reg3,False)
             RF.setRegister(reg1,res)
             RF.resetFlagRegister()
@@ -164,7 +163,6 @@ class ExecutionEngine:
             reg1 = instruction[ 7:10:]      # reading address of reg1
             reg2 = instruction[10:13:]      # reading address of reg2
             reg3 = instruction[13:16:]      # reading address of reg3
-
             res = RF.getRegister(reg2,False) | RF.getRegister(reg3,False)
             RF.setRegister(reg1,res)
             RF.resetFlagRegister()
@@ -177,10 +175,8 @@ class ExecutionEngine:
             reg1 = instruction[ 7:10:]      # reading address of reg1
             reg2 = instruction[10:13:]      # reading address of reg2
             reg3 = instruction[13:16:]      # reading address of reg3
-
             res = RF.getRegister(reg2,False) & RF.getRegister(reg3,False)
             RF.setRegister(reg1,res)
-            
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
