@@ -196,7 +196,8 @@ class ExecutionEngine:
         elif(opcode == "01111"):
             # jmp unused mem_addr
             # 5   3      8
-            pass
+            memoryAddress = instruction[8::]
+            (halt, newPC) = (False, binary8bitToInt(memoryAddress))
             RF.resetFlagRegister()
         # ........................................................................................................................
 
