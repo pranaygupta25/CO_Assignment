@@ -113,7 +113,10 @@ class ExecutionEngine:
         elif(opcode == "00111"):
             # div unused reg3 reg4
             # 5   5      3    3   
-            pass
+            remainder = RF.getRegister(reg3,False) % RF.getRegister(reg4,False)
+            quotient = RF.getRegister(reg3,False) / RF.getRegister(reg3,False)
+            RF.setRegister(reg0,quotient)
+            RF.setRegister(reg1,remainder)
             RF.resetFlagRegister()
             (halt, newPC) = (False, PC.getValue() + 1)
         # ........................................................................................................................
