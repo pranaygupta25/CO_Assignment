@@ -47,7 +47,7 @@ class Memory:
         Returns the integer value of the variable at the "memoryAddress" from the Memory
         \tmemoryAddress: 8bit binary string of address of the variable
         '''
-        return int(self.mem[memoryAddress], 2)
+        return int(self.mem[binary8bitToInt(memoryAddress)], 2)
     # ........................................................................................................................
 
     def setValueOfAddress(self, memoryAddress, intValue):
