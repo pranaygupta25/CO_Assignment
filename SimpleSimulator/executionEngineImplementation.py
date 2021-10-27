@@ -116,7 +116,7 @@ class ExecutionEngine:
             reg3 = instruction[10:13:]      # Reading address of reg3
             reg4 = instruction[13::]        # Reading address of reg4
             remainder = RF.getRegister(reg3,False) % RF.getRegister(reg4,False)
-            quotient = RF.getRegister(reg3,False) / RF.getRegister(reg3,False)
+            quotient = RF.getRegister(reg3,False) // RF.getRegister(reg3,False)
             RF.setRegister("000",quotient)
             RF.setRegister("111",remainder)
             RF.resetFlagRegister()
